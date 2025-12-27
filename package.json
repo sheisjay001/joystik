@@ -1,0 +1,26 @@
+{
+  "name": "communityhub",
+  "version": "1.0.0",
+  "description": "A community management dashboard to engage and manage community members",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "install-client": "cd frontend && npm install",
+    "install-server": "cd backend && npm install",
+    "install-all": "npm install && npm run install-client && npm run install-server"
+  },
+  "keywords": [
+    "community",
+    "management",
+    "engagement",
+    "dashboard"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
