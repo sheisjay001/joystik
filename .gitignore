@@ -10,8 +10,8 @@ logs
 npm-debug.log*
 
 # Build files
-/build
-/dist
+build/
+dist/
 
 # IDE specific files
 .vscode/
