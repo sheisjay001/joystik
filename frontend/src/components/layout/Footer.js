@@ -3,7 +3,7 @@ import { Box, Typography, Container } from '@mui/material';
 
 const Footer = () => {
   return (
-    <Box component="footer" sx={{ bgcolor: '#212121', color: 'white', py: 6, mt: 'auto' }}>
+    <Box component="footer" sx={{ bgcolor: '#212121', color: 'white', py: 3, mt: 'auto' }}>
       <Container maxWidth="lg">
         <Typography variant="h6" align="center" gutterBottom sx={{ color: '#D32F2F', fontWeight: 'bold' }}>
           Joystik

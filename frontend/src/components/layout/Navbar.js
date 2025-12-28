@@ -172,11 +172,7 @@ const Navbar = () => {
                     />
                   </IconButton>
                 </Box>
-              ) : (
-                <Button variant="contained" color="primary" component={RouterLink} to="/login" sx={{ ml: 2 }}>
-                  Login
-                </Button>
-              )}
+              ) : null}
             </Box>
           )}
         </Toolbar>
