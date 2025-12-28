@@ -115,6 +115,8 @@ function App() {
                   <Route path="/events" element={<Events />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/resources" element={<Resources />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
                 </Routes>
               </Container>
             </main>

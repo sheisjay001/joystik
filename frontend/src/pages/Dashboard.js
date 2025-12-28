@@ -22,16 +22,16 @@ const Item = styled(Paper)(({ theme }) => ({
   },
 }));
 
-const StyledIcon = styled(Box)(({ theme, color = 'primary' }) => ({
+const StyledIcon = styled(Box)(({ theme }) => ({
   width: 64,
   height: 64,
-  borderRadius: '50%',
-  backgroundColor: theme.palette[color].light,
+  borderRadius: '12px', // Softer square shape
+  backgroundColor: theme.palette.primary.light,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   marginBottom: theme.spacing(2),
-  color: theme.palette[color].dark, // Darker icon color for contrast
+  color: theme.palette.primary.main, // Darker icon color for contrast
   '& svg': {
     fontSize: '2rem',
   },
@@ -49,39 +49,39 @@ const Dashboard = () => {
       title: 'Upcoming Events',
       value: '5',
       icon: <EventIcon />,
-      color: 'secondary',
+      color: 'primary', // Unify theme
     },
     {
       title: 'Active Polls',
       value: '3',
       icon: <PollIcon />,
-      color: 'primary', // Changed to primary/secondary to stick to red/grey theme
+      color: 'primary', // Unify theme
     },
     {
       title: 'New Announcements',
       value: '2',
       icon: <AnnouncementIcon />,
-      color: 'secondary',
+      color: 'primary', // Unify theme
     },
   ];
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'text.primary', fontWeight: 700 }}>
+      <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
         Dashboard
       </Typography>
       
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
-            <Item elevation={1} sx={{ border: '1px solid', borderColor: 'divider' }}>
-              <StyledIcon color={stat.color}>
+            <Item elevation={1} sx={{ borderLeft: 6, borderColor: 'primary.main' }}>
+              <StyledIcon sx={{ bgcolor: 'primary.light', color: 'primary.main' }}>
                 {stat.icon}
               </StyledIcon>
-              <Typography variant="h5" component="div" gutterBottom>
+              <Typography variant="h4" component="div" sx={{ fontWeight: 'bold', color: 'text.primary' }}>
                 {stat.value}
               </Typography>
-              <Typography variant="body2" color="text.secondary">
+              <Typography variant="subtitle2" color="text.secondary" sx={{ textTransform: 'uppercase', letterSpacing: 1 }}>
                 {stat.title}
               </Typography>
             </Item>
