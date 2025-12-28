@@ -32,14 +32,10 @@ import {
 import {
   Add as AddIcon,
   Edit as EditIcon,
-  Delete as DeleteIcon,
-  CalendarToday as CalendarIcon,
-  AccessTime as TimeIcon,
   LocationOn as LocationIcon,
   People as PeopleIcon,
   Search as SearchIcon,
   FilterList as FilterListIcon,
-  Event as EventIcon,
   Share as ShareIcon,
 } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';

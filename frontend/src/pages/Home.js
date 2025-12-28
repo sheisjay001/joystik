@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Button, Box, Grid, Paper } from '@mui/material';
+import { Container, Typography, Button, Box, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import LoginIcon from '@mui/icons-material/Login';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
