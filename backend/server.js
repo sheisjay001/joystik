@@ -1,14 +1,29 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { connectDB } = require('./config/db');
+const { connectDB, sequelize } = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+const User = require('./models/User');
+const Event = require('./models/Event');
+const Poll = require('./models/Poll');
+const Announcement = require('./models/Announcement');
 
 // Load environment variables
 dotenv.config();
 
 // Connect to database
 connectDB();
+
+// Sync Database
+const syncDB = async () => {
+  try {
+    await sequelize.sync({ alter: true });
+    console.log('Database Synced (Tables created/updated).');
+  } catch (error) {
+    console.error('Failed to sync database:', error.message);
+  }
+};
+syncDB();
 
 const app = express();
 
@@ -21,35 +36,52 @@ app.get('/', (req, res) => {
   res.send('CommunityHub API is running...');
 });
 
-app.get('/api/dashboard', (req, res) => {
-  // Mock data for dashboard
-  const stats = [
-    {
-      title: 'Total Members',
-      value: '1,245',
-      icon: 'PeopleIcon',
-      color: 'primary',
-    },
-    {
-      title: 'Upcoming Events',
-      value: '12',
-      icon: 'EventIcon',
-      color: 'primary',
-    },
-    {
-      title: 'Active Polls',
-      value: '3',
-      icon: 'PollIcon',
-      color: 'primary',
-    },
-    {
-      title: 'New Announcements',
-      value: '5',
-      icon: 'AnnouncementIcon',
-      color: 'primary',
-    },
-  ];
-  res.json(stats);
+app.get('/api/dashboard', async (req, res) => {
+  try {
+    // Fetch counts from database
+    const memberCount = await User.count();
+    const eventCount = await Event.count({ where: { status: 'Upcoming' } });
+    const pollCount = await Poll.count({ where: { status: 'Active' } });
+    const announcementCount = await Announcement.count();
+
+    const stats = [
+      {
+        title: 'Total Members',
+        value: memberCount.toString(),
+        icon: 'PeopleIcon',
+        color: 'primary',
+      },
+      {
+        title: 'Upcoming Events',
+        value: eventCount.toString(),
+        icon: 'EventIcon',
+        color: 'primary',
+      },
+      {
+        title: 'Active Polls',
+        value: pollCount.toString(),
+        icon: 'PollIcon',
+        color: 'primary',
+      },
+      {
+        title: 'New Announcements',
+        value: announcementCount.toString(),
+        icon: 'AnnouncementIcon',
+        color: 'primary',
+      },
+    ];
+    res.json(stats);
+  } catch (error) {
+    console.error('Error fetching dashboard stats:', error);
+    // Fallback to mock data if DB fails
+    const stats = [
+      { title: 'Total Members', value: '0', icon: 'PeopleIcon', color: 'primary' },
+      { title: 'Upcoming Events', value: '0', icon: 'EventIcon', color: 'primary' },
+      { title: 'Active Polls', value: '0', icon: 'PollIcon', color: 'primary' },
+      { title: 'New Announcements', value: '0', icon: 'AnnouncementIcon', color: 'primary' },
+    ];
+    res.json(stats);
+  }
 });
 
 // Error handling middleware
