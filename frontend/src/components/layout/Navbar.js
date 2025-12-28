@@ -8,39 +8,39 @@ const Navbar = () => {
   const { currentUser } = useAuth();
 
   return (
-    <AppBar position="static" elevation={1}>
+    <AppBar position="sticky" color="default" sx={{ bgcolor: 'white', borderBottom: 1, borderColor: 'divider' }}>
       <Toolbar>
         <IconButton
           size="large"
           edge="start"
-          color="inherit"
+          color="primary"
           aria-label="menu"
           sx={{ mr: 2 }}
         >
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <Button color="inherit" component={RouterLink} to="/">
-            CommunityHub
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: 'primary.main', fontWeight: 'bold' }}>
+          <Button color="inherit" component={RouterLink} to="/" sx={{ fontSize: '1.25rem', fontWeight: 700, color: 'primary.main' }}>
+            Joystik
           </Button>
         </Typography>
         
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Button color="inherit" component={RouterLink} to="/members">Members</Button>
-          <Button color="inherit" component={RouterLink} to="/events">Events</Button>
-          <Button color="inherit" component={RouterLink} to="/analytics">Analytics</Button>
-          <Button color="inherit" component={RouterLink} to="/resources">Resources</Button>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Button color="inherit" component={RouterLink} to="/members" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Members</Button>
+          <Button color="inherit" component={RouterLink} to="/events" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Events</Button>
+          <Button color="inherit" component={RouterLink} to="/analytics" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Analytics</Button>
+          <Button color="inherit" component={RouterLink} to="/resources" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Resources</Button>
           
           {currentUser ? (
-            <IconButton color="inherit">
+            <IconButton color="primary" sx={{ ml: 1 }}>
               <Avatar 
                 alt={currentUser.name} 
                 src={currentUser.avatar} 
-                sx={{ width: 32, height: 32 }}
+                sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}
               />
             </IconButton>
           ) : (
-            <Button color="inherit" component={RouterLink} to="/login">
+            <Button variant="contained" color="primary" component={RouterLink} to="/login" sx={{ ml: 2 }}>
               Login
             </Button>
           )}

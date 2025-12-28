@@ -17,24 +17,84 @@ import { AuthProvider } from './context/AuthContext';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1976d2',
+      main: '#D32F2F', // Professional Red
+      dark: '#C62828',
+      light: '#FFCDD2',
     },
     secondary: {
-      main: '#dc004e',
+      main: '#424242', // Dark Grey for balance
+      dark: '#212121',
+      light: '#616161',
     },
     background: {
-      default: '#f5f5f5',
+      default: '#FAFAFA', // Very light grey, almost white
+      paper: '#FFFFFF',
+    },
+    text: {
+      primary: '#212121',
+      secondary: '#757575',
     },
   },
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontWeight: 500,
+      fontWeight: 700,
       fontSize: '2.5rem',
+      letterSpacing: '-0.01562em',
+      color: '#D32F2F',
     },
     h2: {
-      fontWeight: 500,
+      fontWeight: 600,
       fontSize: '2rem',
+      letterSpacing: '-0.00833em',
+      color: '#424242',
+    },
+    h4: {
+      fontWeight: 600,
+      color: '#D32F2F',
+    },
+    h6: {
+      fontWeight: 600,
+    },
+    button: {
+      textTransform: 'none', // More professional than all-caps
+      fontWeight: 500,
+    },
+  },
+  shape: {
+    borderRadius: 8, // Slightly softer corners
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          padding: '8px 22px',
+        },
+        contained: {
+          boxShadow: 'none',
+          '&:hover': {
+            boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2)',
+          },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundImage: 'none',
+        },
+        elevation1: {
+          boxShadow: '0px 2px 8px rgba(0,0,0,0.05)',
+        },
+      },
+    },
+    MuiAppBar: {
+      styleOverrides: {
+        root: {
+          boxShadow: '0px 1px 10px rgba(0,0,0,0.1)',
+        },
+      },
     },
   },
 });

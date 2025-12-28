@@ -22,16 +22,16 @@ const Item = styled(Paper)(({ theme }) => ({
   },
 }));
 
-const StyledIcon = styled(Box)(({ theme }) => ({
+const StyledIcon = styled(Box)(({ theme, color = 'primary' }) => ({
   width: 64,
   height: 64,
   borderRadius: '50%',
-  backgroundColor: theme.palette.primary.light,
+  backgroundColor: theme.palette[color].light,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   marginBottom: theme.spacing(2),
-  color: theme.palette.primary.contrastText,
+  color: theme.palette[color].dark, // Darker icon color for contrast
   '& svg': {
     fontSize: '2rem',
   },
@@ -55,27 +55,27 @@ const Dashboard = () => {
       title: 'Active Polls',
       value: '3',
       icon: <PollIcon />,
-      color: 'success',
+      color: 'primary', // Changed to primary/secondary to stick to red/grey theme
     },
     {
       title: 'New Announcements',
       value: '2',
       icon: <AnnouncementIcon />,
-      color: 'warning',
+      color: 'secondary',
     },
   ];
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom>
+      <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'text.primary', fontWeight: 700 }}>
         Dashboard
       </Typography>
       
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
-            <Item elevation={2}>
-              <StyledIcon sx={{ bgcolor: `${stat.color}.light` }}>
+            <Item elevation={1} sx={{ border: '1px solid', borderColor: 'divider' }}>
+              <StyledIcon color={stat.color}>
                 {stat.icon}
               </StyledIcon>
               <Typography variant="h5" component="div" gutterBottom>

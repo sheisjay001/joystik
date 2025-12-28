@@ -3,12 +3,15 @@ import { Box, Typography, Container } from '@mui/material';
 
 const Footer = () => {
   return (
-    <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6, mt: 'auto' }}>
+    <Box component="footer" sx={{ bgcolor: '#212121', color: 'white', py: 6, mt: 'auto' }}>
       <Container maxWidth="lg">
-        <Typography variant="body2" color="text.secondary" align="center">
+        <Typography variant="h6" align="center" gutterBottom sx={{ color: '#D32F2F', fontWeight: 'bold' }}>
+          Joystik
+        </Typography>
+        <Typography variant="body2" align="center" sx={{ color: '#9e9e9e' }}>
           {'Copyright © '}
-          Community Hub {new Date().getFullYear()}
-          {'.'}
+          Joystik {new Date().getFullYear()}
+          {'. All rights reserved.'}
         </Typography>
       </Container>
     </Box>
