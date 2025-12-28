@@ -63,34 +63,18 @@ const Home = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Paper 
-              elevation={0} 
-              sx={{ 
-                p: 4, 
-                bgcolor: 'transparent',
-                display: 'flex',
-                justifyContent: 'center'
+            <Box
+              component="img"
+              src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop"
+              alt="Community Collaboration"
+              sx={{
+                width: '100%',
+                maxWidth: 600,
+                height: 'auto',
+                borderRadius: 4,
+                boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
               }}
-            >
-              {/* Placeholder for a hero image or illustration */}
-              <Box 
-                sx={{ 
-                  width: '100%', 
-                  maxWidth: 500, 
-                  height: 300, 
-                  bgcolor: 'grey.100', 
-                  borderRadius: 4,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  border: '2px dashed #e0e0e0'
-                }}
-              >
-                <Typography variant="body1" color="text.secondary">
-                  Hero Image / Illustration
-                </Typography>
-              </Box>
-            </Paper>
+            />
           </Grid>
         </Grid>
       </Container>
