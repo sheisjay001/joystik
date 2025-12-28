@@ -18,6 +18,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
 
+import PrivateRoute from './components/routing/PrivateRoute';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -115,12 +117,54 @@ function App() {
               <Container maxWidth="xl" sx={{ py: 4 }}>
                 <Routes>
                   <Route path="/" element={<Home />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/members" element={<Members />} />
-                  <Route path="/events" element={<Events />} />
-                  <Route path="/analytics" element={<Analytics />} />
-                  <Route path="/resources" element={<Resources />} />
-                  <Route path="/settings" element={<Settings />} />
+                  <Route 
+                    path="/dashboard" 
+                    element={
+                      <PrivateRoute>
+                        <Dashboard />
+                      </PrivateRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/members" 
+                    element={
+                      <PrivateRoute>
+                        <Members />
+                      </PrivateRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/events" 
+                    element={
+                      <PrivateRoute>
+                        <Events />
+                      </PrivateRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/analytics" 
+                    element={
+                      <PrivateRoute>
+                        <Analytics />
+                      </PrivateRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/resources" 
+                    element={
+                      <PrivateRoute>
+                        <Resources />
+                      </PrivateRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/settings" 
+                    element={
+                      <PrivateRoute>
+                        <Settings />
+                      </PrivateRoute>
+                    } 
+                  />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                 </Routes>

@@ -38,7 +38,7 @@ const Login = () => {
       
       // Simulate successful login for now to show UX flow
       setTimeout(() => {
-        navigate('/');
+        navigate('/dashboard');
       }, 1000);
       
     } catch (err) {

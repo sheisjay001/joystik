@@ -67,7 +67,7 @@ const Navbar = () => {
       </Box>
       <Divider />
       <List>
-        {menuItems.map((item) => (
+        {currentUser && menuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton 
               component={RouterLink} 
@@ -144,7 +144,7 @@ const Navbar = () => {
           
           {!isMobile && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {menuItems.map((item) => (
+              {currentUser && menuItems.map((item) => (
                 <Button 
                   key={item.text}
                   color="inherit" 

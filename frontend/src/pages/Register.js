@@ -53,7 +53,7 @@ const Register = () => {
       
       // Simulate success
       setTimeout(() => {
-        navigate('/');
+        navigate('/dashboard');
       }, 1000);
     } catch (err) {
       setError('Failed to create an account.');

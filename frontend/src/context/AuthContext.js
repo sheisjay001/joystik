@@ -9,12 +9,17 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(userData);
   };
 
+  const register = (userData) => {
+    // For now, registration just logs the user in immediately
+    setCurrentUser(userData);
+  };
+
   const logout = () => {
     setCurrentUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, logout }}>
+    <AuthContext.Provider value={{ currentUser, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
