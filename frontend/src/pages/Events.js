@@ -23,6 +23,11 @@ import {
   Select,
   useTheme,
   useMediaQuery,
+  InputAdornment,
+  CardMedia,
+  Avatar,
+  AvatarGroup,
+  Divider,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -32,6 +37,10 @@ import {
   AccessTime as TimeIcon,
   LocationOn as LocationIcon,
   People as PeopleIcon,
+  Search as SearchIcon,
+  FilterList as FilterListIcon,
+  Event as EventIcon,
+  Share as ShareIcon,
 } from '@mui/icons-material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
@@ -39,11 +48,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const eventTypes = [
-  { value: 'meetup', label: 'Meetup' },
-  { value: 'workshop', label: 'Workshop' },
-  { value: 'webinar', label: 'Webinar' },
-  { value: 'social', label: 'Social Gathering' },
-  { value: 'conference', label: 'Conference' },
+  { value: 'meetup', label: 'Meetup', color: 'primary' },
+  { value: 'workshop', label: 'Workshop', color: 'secondary' },
+  { value: 'webinar', label: 'Webinar', color: 'info' },
+  { value: 'social', label: 'Social', color: 'warning' },
+  { value: 'conference', label: 'Conference', color: 'error' },
 ];
 
 // Sample events data
@@ -59,6 +68,7 @@ const sampleEvents = [
     capacity: 50,
     attendees: 32,
     status: 'upcoming',
+    image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 2,
@@ -71,6 +81,7 @@ const sampleEvents = [
     capacity: 30,
     attendees: 25,
     status: 'upcoming',
+    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
   },
   {
     id: 3,
@@ -83,6 +94,7 @@ const sampleEvents = [
     capacity: 100,
     attendees: 87,
     status: 'upcoming',
+    image: 'https://images.unsplash.com/photo-1514525253440-b393452e8d26?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
   },
 ];
 
@@ -90,6 +102,7 @@ const Events = () => {
   const [activeTab, setActiveTab] = useState('upcoming');
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -113,118 +126,195 @@ const Events = () => {
     handleCloseDialog();
   };
 
-  const filteredEvents = sampleEvents.filter((event) => event.status === activeTab);
+  const filteredEvents = sampleEvents.filter((event) => {
+    const matchesTab = event.status === activeTab;
+    const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          event.location.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesTab && matchesSearch;
+  });
 
   const getEventTypeColor = (type) => {
-    switch (type) {
-      case 'meetup':
-        return 'primary';
-      case 'workshop':
-        return 'secondary';
-      case 'webinar':
-        return 'success';
-      case 'social':
-        return 'warning';
-      case 'conference':
-        return 'error';
-      default:
-        return 'default';
-    }
+    const found = eventTypes.find(t => t.value === type);
+    return found ? found.color : 'default';
   };
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1">
-          Events
-        </Typography>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, mb: 4, gap: 2 }}>
+        <Box>
+          <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
+            Events
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Discover and join community gatherings
+          </Typography>
+        </Box>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => handleOpenDialog()}
+          sx={{ borderRadius: 2, px: 3, py: 1 }}
         >
           Create Event
         </Button>
       </Box>
 
-      <Paper sx={{ mb: 3 }}>
+      {/* Search and Filter Bar */}
+      <Paper 
+        elevation={0} 
+        sx={{ 
+          p: 2, 
+          mb: 4, 
+          border: 1, 
+          borderColor: 'divider', 
+          borderRadius: 2,
+          display: 'flex',
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: 'center',
+          gap: 2,
+          bgcolor: 'grey.50'
+        }}
+      >
+        <TextField
+          placeholder="Search events..."
+          variant="outlined"
+          size="small"
+          fullWidth
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon color="action" />
+              </InputAdornment>
+            ),
+          }}
+          sx={{ bgcolor: 'white' }}
+        />
         <Tabs
           value={activeTab}
           onChange={handleTabChange}
           variant="scrollable"
           scrollButtons="auto"
-          allowScrollButtonsMobile
+          textColor="primary"
+          indicatorColor="primary"
+          sx={{ 
+            flexShrink: 0,
+            '& .MuiTab-root': { fontWeight: 'bold' } 
+          }}
         >
           <Tab label="Upcoming" value="upcoming" />
           <Tab label="Past" value="past" />
           <Tab label="Draft" value="draft" />
-          <Tab label="Cancelled" value="cancelled" />
         </Tabs>
+        <Button 
+          variant="outlined" 
+          startIcon={<FilterListIcon />}
+          sx={{ whiteSpace: 'nowrap' }}
+        >
+          Filters
+        </Button>
       </Paper>
 
       <Grid container spacing={3}>
         {filteredEvents.map((event) => (
           <Grid item xs={12} sm={6} md={4} key={event.id}>
-            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                  <Chip
-                    label={eventTypes.find((t) => t.value === event.type)?.label || event.type}
-                    size="small"
-                    color={getEventTypeColor(event.type)}
-                    variant="outlined"
-                  />
+            <Card 
+              elevation={0}
+              sx={{ 
+                height: '100%', 
+                display: 'flex', 
+                flexDirection: 'column',
+                border: 1,
+                borderColor: 'divider',
+                borderRadius: 2,
+                transition: 'transform 0.2s, box-shadow 0.2s',
+                '&:hover': {
+                  transform: 'translateY(-4px)',
+                  boxShadow: 4
+                }
+              }}
+            >
+              <Box sx={{ position: 'relative' }}>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={event.image || 'https://source.unsplash.com/random/800x600?event'}
+                  alt={event.title}
+                />
+                <Chip
+                  label={eventTypes.find((t) => t.value === event.type)?.label || event.type}
+                  size="small"
+                  color={getEventTypeColor(event.type)}
+                  sx={{ 
+                    position: 'absolute', 
+                    top: 12, 
+                    right: 12, 
+                    fontWeight: 'bold',
+                    boxShadow: 1
+                  }}
+                />
+              </Box>
+              
+              <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 1 }}>
+                  <Typography variant="caption" color="primary.main" fontWeight="bold">
+                    {new Date(event.date).toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                    }).toUpperCase()} • {event.time}
+                  </Typography>
                   <Box>
                     <IconButton size="small" onClick={() => handleOpenDialog(event)}>
                       <EditIcon fontSize="small" />
                     </IconButton>
-                    <IconButton size="small" color="error">
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
                   </Box>
                 </Box>
-                <Typography variant="h6" component="h2" gutterBottom>
+                
+                <Typography variant="h6" component="h2" gutterBottom fontWeight="bold">
                   {event.title}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <CalendarIcon color="action" fontSize="small" sx={{ mr: 1 }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {new Date(event.date).toLocaleDateString('en-US', {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <TimeIcon color="action" fontSize="small" sx={{ mr: 1 }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {event.time}
-                  </Typography>
-                </Box>
+                
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                  <LocationIcon color="action" fontSize="small" sx={{ mr: 1 }} />
-                  <Typography variant="body2" color="text.secondary">
+                  <LocationIcon color="action" fontSize="small" sx={{ mr: 0.5 }} />
+                  <Typography variant="body2" color="text.secondary" noWrap>
                     {event.location}
                   </Typography>
                 </Box>
-                <Typography variant="body2" color="text.secondary" paragraph>
+                
+                <Typography variant="body2" color="text.secondary" paragraph sx={{ 
+                  display: '-webkit-box',
+                  overflow: 'hidden',
+                  WebkitBoxOrient: 'vertical',
+                  WebkitLineClamp: 2,
+                }}>
                   {event.description}
                 </Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', mt: 'auto' }}>
-                  <PeopleIcon color="action" fontSize="small" sx={{ mr: 1 }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {event.attendees} / {event.capacity} attendees
-                  </Typography>
+                
+                <Divider sx={{ my: 2 }} />
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <AvatarGroup max={3} sx={{ '& .MuiAvatar-root': { width: 24, height: 24, fontSize: 12 } }}>
+                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                    <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+                    <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+                  </AvatarGroup>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <PeopleIcon color="action" fontSize="small" sx={{ mr: 0.5 }} />
+                    <Typography variant="caption" color="text.secondary">
+                      {event.attendees}/{event.capacity}
+                    </Typography>
+                  </Box>
                 </Box>
               </CardContent>
-              <CardActions>
-                <Button size="small" color="primary">
-                  View Details
+              
+              <CardActions sx={{ p: 2, pt: 0 }}>
+                <Button size="small" variant="outlined" fullWidth startIcon={<ShareIcon />}>
+                  Share
                 </Button>
-                <Button size="small" color="primary" variant="outlined" sx={{ ml: 'auto' }}>
-                  RSVP
+                <Button size="small" variant="contained" fullWidth>
+                  Register
                 </Button>
               </CardActions>
             </Card>
