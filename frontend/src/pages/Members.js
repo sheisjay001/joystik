@@ -81,7 +81,7 @@ const Members = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, mb: 4, gap: 2 }}>
         <Box>
           <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
             Members
@@ -99,7 +99,7 @@ const Members = () => {
         </Button>
       </Box>
 
-      <Paper elevation={0} sx={{ p: 2, mb: 3, display: 'flex', gap: 2, bgcolor: 'background.paper', border: 1, borderColor: 'divider' }}>
+      <Paper elevation={0} sx={{ p: 2, mb: 3, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, bgcolor: 'background.paper', border: 1, borderColor: 'divider' }}>
         <TextField
           fullWidth
           size="small"

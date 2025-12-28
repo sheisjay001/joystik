@@ -69,7 +69,7 @@ const Dashboard = () => {
 
   return (
     <Box>
-      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Box sx={{ mb: 4, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2 }}>
         <Box>
           <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
             Dashboard

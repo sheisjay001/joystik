@@ -112,7 +112,7 @@ const Analytics = () => {
 
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, mb: 4, gap: 2 }}>
         <Box>
           <Typography variant="h4" component="h1" fontWeight="bold" gutterBottom>
             Analytics
@@ -121,7 +121,7 @@ const Analytics = () => {
             Overview of community growth and engagement
           </Typography>
         </Box>
-        <Box sx={{ display: 'flex', gap: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2 }}>
           <Button 
             variant="outlined" 
             startIcon={<CalendarIcon />}
