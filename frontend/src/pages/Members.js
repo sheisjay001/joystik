@@ -16,8 +16,15 @@ import {
   IconButton,
   Tooltip,
   Button,
+  Chip
 } from '@mui/material';
-import { Search as SearchIcon, Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { 
+  Search as SearchIcon, 
+  Add as AddIcon, 
+  Edit as EditIcon, 
+  Delete as DeleteIcon,
+  FilterList as FilterListIcon 
+} from '@mui/icons-material';
 
 const Members = () => {
   const [page, setPage] = useState(0);
@@ -31,6 +38,9 @@ const Members = () => {
     { id: 3, name: 'Alex Johnson', email: 'alex@example.com', role: 'Moderator', joinDate: '2023-03-10', status: 'Inactive' },
     { id: 4, name: 'Sarah Williams', email: 'sarah@example.com', role: 'Member', joinDate: '2023-04-05', status: 'Active' },
     { id: 5, name: 'Michael Brown', email: 'michael@example.com', role: 'Member', joinDate: '2023-05-12', status: 'Active' },
+    { id: 6, name: 'Emily Davis', email: 'emily@example.com', role: 'Member', joinDate: '2023-06-18', status: 'Active' },
+    { id: 7, name: 'David Wilson', email: 'david@example.com', role: 'Moderator', joinDate: '2023-07-22', status: 'Active' },
+    { id: 8, name: 'Lisa Taylor', email: 'lisa@example.com', role: 'Member', joinDate: '2023-08-30', status: 'Inactive' },
   ];
 
   const handleChangePage = (event, newPage) => {
@@ -57,103 +67,111 @@ const Members = () => {
 
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, filteredMembers.length - page * rowsPerPage);
 
+  const getRoleColor = (role) => {
+    switch (role) {
+      case 'Admin': return 'error';
+      case 'Moderator': return 'warning';
+      default: return 'default';
+    }
+  };
+
+  const getStatusColor = (status) => {
+    return status === 'Active' ? 'success' : 'default';
+  };
+
   return (
     <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-        <Typography variant="h4" component="h1">
-          Member Directory
-        </Typography>
-        <Button variant="contained" startIcon={<AddIcon />}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+        <Box>
+          <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+            Members
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Manage your community members
+          </Typography>
+        </Box>
+        <Button 
+          variant="contained" 
+          startIcon={<AddIcon />}
+          sx={{ px: 3, py: 1 }}
+        >
           Add Member
         </Button>
       </Box>
 
-      <Paper sx={{ p: 2, mb: 3 }}>
+      <Paper elevation={0} sx={{ p: 2, mb: 3, display: 'flex', gap: 2, bgcolor: 'background.paper', border: 1, borderColor: 'divider' }}>
         <TextField
           fullWidth
+          size="small"
           variant="outlined"
-          placeholder="Search members..."
+          placeholder="Search by name, email, or role..."
           value={searchTerm}
           onChange={handleSearchChange}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon />
+                <SearchIcon color="action" />
               </InputAdornment>
             ),
           }}
+          sx={{ bgcolor: 'white' }}
         />
+        <Button variant="outlined" startIcon={<FilterListIcon />}>
+          Filters
+        </Button>
       </Paper>
 
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} elevation={0} sx={{ border: 1, borderColor: 'divider' }}>
         <Table sx={{ minWidth: 650 }} aria-label="members table">
-          <TableHead>
+          <TableHead sx={{ bgcolor: 'grey.50' }}>
             <TableRow>
-              <TableCell>Member</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Join Date</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Member</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Email</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Role</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Join Date</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Status</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 'bold', color: 'text.secondary' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {filteredMembers
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((member) => (
-                <TableRow key={member.id} hover>
+                <TableRow key={member.id} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <Avatar alt={member.name} src={`https://i.pravatar.cc/150?u=${member.email}`} />
-                      {member.name}
+                      <Avatar 
+                        alt={member.name} 
+                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=random`} 
+                        sx={{ width: 40, height: 40 }}
+                      />
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                        {member.name}
+                      </Typography>
                     </Box>
                   </TableCell>
                   <TableCell>{member.email}</TableCell>
                   <TableCell>
-                    <Box
-                      sx={{
-                        display: 'inline-block',
-                        px: 1,
-                        py: 0.5,
-                        borderRadius: 1,
-                        bgcolor:
-                          member.role === 'Admin'
-                            ? 'primary.light'
-                            : member.role === 'Moderator'
-                            ? 'secondary.light'
-                            : 'action.hover',
-                        color:
-                          member.role === 'Admin' || member.role === 'Moderator'
-                            ? 'primary.contrastText'
-                            : 'text.primary',
-                      }}
-                    >
-                      {member.role}
-                    </Box>
+                    <Chip 
+                      label={member.role} 
+                      size="small" 
+                      color={getRoleColor(member.role)} 
+                      variant="outlined" 
+                      sx={{ fontWeight: 500 }}
+                    />
                   </TableCell>
                   <TableCell>{new Date(member.joinDate).toLocaleDateString()}</TableCell>
                   <TableCell>
-                    <Box
-                      sx={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        '&::before': {
-                          content: '""',
-                          display: 'inline-block',
-                          width: 8,
-                          height: 8,
-                          borderRadius: '50%',
-                          bgcolor: member.status === 'Active' ? 'success.main' : 'error.main',
-                          mr: 1,
-                        },
-                      }}
-                    >
-                      {member.status}
-                    </Box>
+                    <Chip 
+                      label={member.status} 
+                      size="small" 
+                      color={getStatusColor(member.status)} 
+                      sx={{ borderRadius: 1, px: 1 }}
+                    />
                   </TableCell>
                   <TableCell align="right">
                     <Tooltip title="Edit">
-                      <IconButton size="small" sx={{ mr: 1 }}>
+                      <IconButton size="small" sx={{ mr: 1, color: 'primary.main' }}>
                         <EditIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
@@ -166,8 +184,17 @@ const Members = () => {
                 </TableRow>
               ))}
             {emptyRows > 0 && (
-              <TableRow style={{ height: 53 * emptyRows }}>
+              <TableRow style={{ height: 73 * emptyRows }}>
                 <TableCell colSpan={6} />
+              </TableRow>
+            )}
+            {filteredMembers.length === 0 && (
+              <TableRow style={{ height: 200 }}>
+                <TableCell colSpan={6} align="center">
+                  <Typography variant="body1" color="text.secondary">
+                    No members found matching your search.
+                  </Typography>
+                </TableCell>
               </TableRow>
             )}
           </TableBody>
