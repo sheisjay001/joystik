@@ -12,6 +12,8 @@ import Members from './pages/Members';
 import Events from './pages/Events';
 import Analytics from './pages/Analytics';
 import Resources from './pages/Resources';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
 
 const theme = createTheme({
