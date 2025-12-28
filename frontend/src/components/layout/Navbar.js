@@ -1,11 +1,17 @@
 import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, Button, Box, IconButton, Avatar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <AppBar position="sticky" color="default" sx={{ bgcolor: 'white', borderBottom: 1, borderColor: 'divider' }}>
@@ -32,13 +38,23 @@ const Navbar = () => {
           <Button color="inherit" component={RouterLink} to="/resources" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Resources</Button>
           
           {currentUser ? (
-            <IconButton color="primary" sx={{ ml: 1 }}>
-              <Avatar 
-                alt={currentUser.name} 
-                src={currentUser.avatar} 
-                sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}
-              />
-            </IconButton>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Button 
+                variant="outlined" 
+                color="primary" 
+                onClick={handleLogout}
+                sx={{ ml: 1, mr: 1 }}
+              >
+                Logout
+              </Button>
+              <IconButton color="primary">
+                <Avatar 
+                  alt={currentUser.name} 
+                  src={currentUser.avatar} 
+                  sx={{ width: 32, height: 32, bgcolor: 'primary.main' }}
+                />
+              </IconButton>
+            </Box>
           ) : (
             <Button variant="contained" color="primary" component={RouterLink} to="/login" sx={{ ml: 2 }}>
               Login

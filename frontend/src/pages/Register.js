@@ -47,7 +47,8 @@ const Register = () => {
     setLoading(true);
     
     try {
-      // await register(formData);
+      // Temporary simulation
+      register({ firstName: formData.firstName, lastName: formData.lastName, email: formData.email });
       console.log('Register attempt:', formData);
       
       // Simulate success

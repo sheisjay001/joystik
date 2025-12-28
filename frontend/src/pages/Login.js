@@ -32,8 +32,8 @@ const Login = () => {
     setLoading(true);
     
     try {
-      // Temporary simulation for UI demonstration if backend isn't fully ready
-      // await login(email, password);
+      // Temporary simulation for UI demonstration
+      login({ name: 'Demo User', email: email });
       console.log('Login attempt:', { email, password });
       
       // Simulate successful login for now to show UX flow
