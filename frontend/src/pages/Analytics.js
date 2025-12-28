@@ -10,12 +10,9 @@ import {
   Button, 
   Menu, 
   MenuItem,
-  Divider,
   useTheme
 } from '@mui/material';
 import {
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
