@@ -93,7 +93,14 @@ const Navbar = () => {
                   src={currentUser.avatar} 
                   sx={{ width: 40, height: 40, bgcolor: 'primary.main' }}
                 />
-                <Typography variant="subtitle1">{currentUser.name}</Typography>
+                <Typography variant="subtitle1">
+                  {currentUser.name}
+                  {currentUser.role === 'Admin' && (
+                    <Box component="span" sx={{ ml: 1, fontSize: '0.75rem', color: 'primary.main', fontWeight: 'bold' }}>
+                      (Admin)
+                    </Box>
+                  )}
+                </Typography>
                </Box>
             </ListItem>
             <ListItem disablePadding>
@@ -158,6 +165,11 @@ const Navbar = () => {
               
               {currentUser ? (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  {currentUser.role === 'Admin' && (
+                     <Box sx={{ mr: 2, fontSize: '0.875rem', color: 'primary.main', fontWeight: 'bold' }}>
+                       Admin Mode
+                     </Box>
+                  )}
                   <Button 
                     variant="outlined" 
                     color="primary" 

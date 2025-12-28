@@ -19,7 +19,7 @@ const seedData = async () => {
     // Create Users
     const adminUser = await User.create({
       name: 'Admin User',
-      email: 'admin@example.com',
+      email: 'admin@joystik.com',
       password: 'password123', // Will be hashed by hooks
       role: 'Admin',
       status: 'Active'
@@ -27,7 +27,7 @@ const seedData = async () => {
 
     const memberUser = await User.create({
       name: 'John Doe',
-      email: 'john@example.com',
+      email: 'user@joystik.com',
       password: 'password123',
       role: 'Member',
       status: 'Active'

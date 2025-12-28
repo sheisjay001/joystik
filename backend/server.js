@@ -3,6 +3,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const { connectDB, sequelize } = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+const userRoutes = require('./routes/userRoutes');
 const User = require('./models/User');
 const Event = require('./models/Event');
 const Poll = require('./models/Poll');
@@ -30,6 +31,8 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/users', userRoutes);
 
 // Routes
 app.get('/', (req, res) => {

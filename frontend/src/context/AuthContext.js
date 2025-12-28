@@ -1,26 +1,75 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const login = (userData) => {
-    setCurrentUser(userData);
+  useEffect(() => {
+    const userInfo = localStorage.getItem('userInfo');
+    if (userInfo) {
+      setCurrentUser(JSON.parse(userInfo));
+    }
+    setLoading(false);
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      const response = await fetch('/api/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      setCurrentUser(data);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   };
 
-  const register = (userData) => {
-    // For now, registration just logs the user in immediately
-    setCurrentUser(userData);
+  const register = async (name, email, password) => {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Registration failed');
+      }
+
+      localStorage.setItem('userInfo', JSON.stringify(data));
+      setCurrentUser(data);
+      return data;
+    } catch (error) {
+      throw error;
+    }
   };
 
   const logout = () => {
+    localStorage.removeItem('userInfo');
     setCurrentUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ currentUser, login, register, logout }}>
-      {children}
+    <AuthContext.Provider value={{ currentUser, login, register, logout, loading }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

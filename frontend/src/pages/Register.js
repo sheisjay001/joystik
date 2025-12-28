@@ -47,16 +47,10 @@ const Register = () => {
     setLoading(true);
     
     try {
-      // Temporary simulation
-      register({ firstName: formData.firstName, lastName: formData.lastName, email: formData.email });
-      console.log('Register attempt:', formData);
-      
-      // Simulate success
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1000);
+      await register(formData.firstName + ' ' + formData.lastName, formData.email, formData.password);
+      navigate('/dashboard');
     } catch (err) {
-      setError('Failed to create an account.');
+      setError(err.message || 'Failed to create an account.');
     }
     setLoading(false);
   };

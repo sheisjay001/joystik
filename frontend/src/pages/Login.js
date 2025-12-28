@@ -32,17 +32,10 @@ const Login = () => {
     setLoading(true);
     
     try {
-      // Temporary simulation for UI demonstration
-      login({ name: 'Demo User', email: email });
-      console.log('Login attempt:', { email, password });
-      
-      // Simulate successful login for now to show UX flow
-      setTimeout(() => {
-        navigate('/dashboard');
-      }, 1000);
-      
+      await login(email, password);
+      navigate('/dashboard');
     } catch (err) {
-      setError('Failed to sign in. Please check your credentials.');
+      setError(err.message || 'Failed to sign in. Please check your credentials.');
     }
     setLoading(false);
   };
