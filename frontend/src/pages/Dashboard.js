@@ -1,10 +1,11 @@
 import React from 'react';
-import { Grid, Paper, Typography, Box } from '@mui/material';
+import { Grid, Paper, Typography, Box, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import PeopleIcon from '@mui/icons-material/People';
 import EventIcon from '@mui/icons-material/Event';
 import PollIcon from '@mui/icons-material/Poll';
 import AnnouncementIcon from '@mui/icons-material/Announcement';
+import { Link as RouterLink } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -38,38 +39,49 @@ const StyledIcon = styled(Box)(({ theme }) => ({
 }));
 
 const Dashboard = () => {
+  // Initial state with no data
   const stats = [
     {
       title: 'Total Members',
-      value: '1,234',
+      value: '0',
       icon: <PeopleIcon />,
       color: 'primary',
     },
     {
       title: 'Upcoming Events',
-      value: '5',
+      value: '0',
       icon: <EventIcon />,
-      color: 'primary', // Unify theme
+      color: 'primary',
     },
     {
       title: 'Active Polls',
-      value: '3',
+      value: '0',
       icon: <PollIcon />,
-      color: 'primary', // Unify theme
+      color: 'primary',
     },
     {
       title: 'New Announcements',
-      value: '2',
+      value: '0',
       icon: <AnnouncementIcon />,
-      color: 'primary', // Unify theme
+      color: 'primary',
     },
   ];
 
   return (
     <Box>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold', mb: 3 }}>
-        Dashboard
-      </Typography>
+      <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box>
+          <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
+            Dashboard
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Welcome to your community overview
+          </Typography>
+        </Box>
+        <Button variant="contained" component={RouterLink} to="/events" color="primary">
+          Create Event
+        </Button>
+      </Box>
       
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
@@ -91,33 +103,26 @@ const Dashboard = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={8}>
-          <Paper sx={{ p: 3, mb: 3 }}>
+          <Paper sx={{ p: 4, mb: 3, textAlign: 'center', minHeight: 200, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <Typography variant="h6" gutterBottom>
               Recent Activity
             </Typography>
-            <Typography color="text.secondary">
-              No recent activity to display. Check back later!
+            <Typography color="text.secondary" sx={{ mb: 2 }}>
+              There is no recent activity to display yet.
             </Typography>
+            <Button variant="outlined" component={RouterLink} to="/analytics">
+              View Analytics
+            </Button>
           </Paper>
         </Grid>
         <Grid item xs={12} md={4}>
-          <Paper sx={{ p: 3 }}>
+           <Paper sx={{ p: 4, mb: 3, textAlign: 'center', minHeight: 200, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <Typography variant="h6" gutterBottom>
               Quick Actions
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <Box sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 1, cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }}>
-                <Typography variant="subtitle2">Create New Poll</Typography>
-                <Typography variant="body2" color="text.secondary">Engage your community with a quick poll</Typography>
-              </Box>
-              <Box sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 1, cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }}>
-                <Typography variant="subtitle2">Schedule Event</Typography>
-                <Typography variant="body2" color="text.secondary">Plan your next community gathering</Typography>
-              </Box>
-              <Box sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 1, cursor: 'pointer', '&:hover': { bgcolor: 'action.hover' } }}>
-                <Typography variant="subtitle2">Post Announcement</Typography>
-                <Typography variant="body2" color="text.secondary">Share important updates with members</Typography>
-              </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
+              <Button variant="text" fullWidth component={RouterLink} to="/members">Manage Members</Button>
+              <Button variant="text" fullWidth component={RouterLink} to="/resources">Upload Resources</Button>
             </Box>
           </Paper>
         </Grid>
