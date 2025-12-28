@@ -8,6 +8,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import Dashboard from './pages/Dashboard';
+import Home from './pages/Home';
 import Members from './pages/Members';
 import Events from './pages/Events';
 import Analytics from './pages/Analytics';
@@ -112,7 +113,8 @@ function App() {
             <main className="main-content">
               <Container maxWidth="xl" sx={{ py: 4 }}>
                 <Routes>
-                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/" element={<Home />} />
+                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/members" element={<Members />} />
                   <Route path="/events" element={<Events />} />
                   <Route path="/analytics" element={<Analytics />} />

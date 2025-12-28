@@ -32,6 +32,7 @@ const Navbar = () => {
         </Typography>
         
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Button color="inherit" component={RouterLink} to="/dashboard" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Dashboard</Button>
           <Button color="inherit" component={RouterLink} to="/members" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Members</Button>
           <Button color="inherit" component={RouterLink} to="/events" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Events</Button>
           <Button color="inherit" component={RouterLink} to="/analytics" sx={{ color: 'text.primary', '&:hover': { color: 'primary.main', bgcolor: 'primary.light' } }}>Analytics</Button>
