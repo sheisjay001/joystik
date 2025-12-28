@@ -28,6 +28,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
+  // eslint-disable-next-line no-unused-vars
   const { register } = useAuth(); // Assuming register function exists
   const navigate = useNavigate();
 

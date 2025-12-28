@@ -22,6 +22,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
+  // eslint-disable-next-line no-unused-vars
   const { login } = useAuth(); // Assuming login function exists in AuthContext
   const navigate = useNavigate();
 
