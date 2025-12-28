@@ -13,6 +13,7 @@ import Members from './pages/Members';
 import Events from './pages/Events';
 import Analytics from './pages/Analytics';
 import Resources from './pages/Resources';
+import Settings from './pages/Settings';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import { AuthProvider } from './context/AuthContext';
@@ -119,6 +120,7 @@ function App() {
                   <Route path="/events" element={<Events />} />
                   <Route path="/analytics" element={<Analytics />} />
                   <Route path="/resources" element={<Resources />} />
+                  <Route path="/settings" element={<Settings />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                 </Routes>

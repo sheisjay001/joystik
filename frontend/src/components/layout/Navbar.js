@@ -24,6 +24,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import EventIcon from '@mui/icons-material/Event';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import FolderIcon from '@mui/icons-material/Folder';
+import SettingsIcon from '@mui/icons-material/Settings';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuth } from '../../context/AuthContext';
@@ -51,6 +52,7 @@ const Navbar = () => {
     { text: 'Events', path: '/events', icon: <EventIcon /> },
     { text: 'Analytics', path: '/analytics', icon: <BarChartIcon /> },
     { text: 'Resources', path: '/resources', icon: <FolderIcon /> },
+    { text: 'Settings', path: '/settings', icon: <SettingsIcon /> },
   ];
 
   const drawer = (
