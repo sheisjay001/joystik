@@ -21,6 +21,37 @@ app.get('/', (req, res) => {
   res.send('CommunityHub API is running...');
 });
 
+app.get('/api/dashboard', (req, res) => {
+  // Mock data for dashboard
+  const stats = [
+    {
+      title: 'Total Members',
+      value: '1,245',
+      icon: 'PeopleIcon',
+      color: 'primary',
+    },
+    {
+      title: 'Upcoming Events',
+      value: '12',
+      icon: 'EventIcon',
+      color: 'primary',
+    },
+    {
+      title: 'Active Polls',
+      value: '3',
+      icon: 'PollIcon',
+      color: 'primary',
+    },
+    {
+      title: 'New Announcements',
+      value: '5',
+      icon: 'AnnouncementIcon',
+      color: 'primary',
+    },
+  ];
+  res.json(stats);
+});
+
 // Error handling middleware
 app.use(notFound);
 app.use(errorHandler);

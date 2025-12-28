@@ -1,5 +1,5 @@
-import React from 'react';
-import { Grid, Paper, Typography, Box, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Grid, Paper, Typography, Box, Button, CircularProgress, Alert } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import PeopleIcon from '@mui/icons-material/People';
 import EventIcon from '@mui/icons-material/Event';
@@ -39,33 +39,55 @@ const StyledIcon = styled(Box)(({ theme }) => ({
 }));
 
 const Dashboard = () => {
-  // Initial state with no data
-  const stats = [
-    {
-      title: 'Total Members',
-      value: '0',
-      icon: <PeopleIcon />,
-      color: 'primary',
-    },
-    {
-      title: 'Upcoming Events',
-      value: '0',
-      icon: <EventIcon />,
-      color: 'primary',
-    },
-    {
-      title: 'Active Polls',
-      value: '0',
-      icon: <PollIcon />,
-      color: 'primary',
-    },
-    {
-      title: 'New Announcements',
-      value: '0',
-      icon: <AnnouncementIcon />,
-      color: 'primary',
-    },
-  ];
+  const [stats, setStats] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch('/api/dashboard');
+        if (!response.ok) {
+          throw new Error('Failed to fetch dashboard data');
+        }
+        const data = await response.json();
+        
+        // Map string icon names back to components
+        const mappedData = data.map(item => ({
+          ...item,
+          icon: getIconComponent(item.icon)
+        }));
+        
+        setStats(mappedData);
+        setLoading(false);
+      } catch (err) {
+        console.error(err);
+        setError('Failed to load dashboard data. Please try again later.');
+        setLoading(false);
+        // Fallback to initial empty state or mock if needed
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const getIconComponent = (iconName) => {
+    switch (iconName) {
+      case 'PeopleIcon': return <PeopleIcon />;
+      case 'EventIcon': return <EventIcon />;
+      case 'PollIcon': return <PollIcon />;
+      case 'AnnouncementIcon': return <AnnouncementIcon />;
+      default: return <PeopleIcon />;
+    }
+  };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Box>
@@ -82,6 +104,12 @@ const Dashboard = () => {
           Create Event
         </Button>
       </Box>
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error}
+        </Alert>
+      )}
       
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
