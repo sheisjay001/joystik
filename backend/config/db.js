@@ -21,7 +21,12 @@ const sequelize = new Sequelize(
   }
 );
 
-const connectDB = async (retries = 5) => {
+const connectDB = async () => {
+  // In production (Vercel), fail fast to avoid function timeout
+  // In development, retry a few times
+  let retries = process.env.NODE_ENV === 'production' ? 1 : 5;
+  const delay = 2000; // 2 seconds
+
   while (retries > 0) {
     try {
       await sequelize.authenticate();
@@ -33,8 +38,7 @@ const connectDB = async (retries = 5) => {
       if (retries === 0) {
         console.error('Max retries reached. Running without database connection.');
       } else {
-        // Wait for 5 seconds before next retry
-        await new Promise(res => setTimeout(res, 5000));
+        await new Promise(res => setTimeout(res, delay));
       }
     }
   }

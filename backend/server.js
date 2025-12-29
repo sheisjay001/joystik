@@ -41,6 +41,10 @@ app.get('/', (req, res) => {
   res.send('CommunityHub API is running...');
 });
 
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', environment: process.env.NODE_ENV });
+});
+
 app.get('/api/dashboard', async (req, res) => {
   try {
     // Fetch counts from database
