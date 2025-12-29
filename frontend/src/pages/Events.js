@@ -57,6 +57,9 @@ const Events = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
@@ -81,6 +84,17 @@ const Events = () => {
 
   const handleOpenDialog = (event = null) => {
     setSelectedEvent(event);
+    if (event) {
+      setSelectedDate(new Date(event.date));
+      // Construct a valid date object for time
+      const timeParts = event.time ? event.time.split(':') : ['00', '00'];
+      const timeDate = new Date();
+      timeDate.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]));
+      setSelectedTime(timeDate);
+    } else {
+      setSelectedDate(new Date());
+      setSelectedTime(new Date());
+    }
     setOpenDialog(true);
   };
 
@@ -95,35 +109,35 @@ const Events = () => {
     // Construct event object from form data
     const formData = new FormData(event.target);
     const eventData = {
-      title: formData.get('title'), // You need to add name attributes to inputs
+      title: formData.get('title'),
       type: formData.get('type'),
       location: formData.get('location'),
-      // date: ..., // Date handling might need state or specific parsing
-      // time: ...,
+      date: selectedDate.toISOString().split('T')[0],
+      time: selectedTime.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit' }),
       capacity: formData.get('capacity'),
       description: formData.get('description'),
       status: 'upcoming' // default
     };
 
-    // For now, we will just reload the page or re-fetch since inputs need name attributes
-    // This is a placeholder for the actual API call
-    /*
     try {
       const method = selectedEvent ? 'PUT' : 'POST';
       const url = selectedEvent ? `/api/events/${selectedEvent.id}` : '/api/events';
       
-      await fetch(url, {
+      const response = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(eventData)
       });
-      fetchEvents();
+
+      if (response.ok) {
+        fetchEvents();
+        handleCloseDialog();
+      } else {
+        console.error('Failed to save event');
+      }
     } catch (error) {
       console.error('Error saving event:', error);
     }
-    */
-    
-    handleCloseDialog();
   };
 
   const filteredEvents = events.filter((event) => {
@@ -331,6 +345,7 @@ const Events = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
+                  name="title"
                   label="Event Title"
                   defaultValue={selectedEvent?.title || ''}
                   required
@@ -340,6 +355,7 @@ const Events = () => {
                 <FormControl fullWidth required>
                   <InputLabel>Event Type</InputLabel>
                   <Select
+                    name="type"
                     label="Event Type"
                     defaultValue={selectedEvent?.type || ''}
                   >
@@ -354,6 +370,7 @@ const Events = () => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  name="location"
                   label="Location"
                   defaultValue={selectedEvent?.location || ''}
                   required
@@ -363,8 +380,9 @@ const Events = () => {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <DatePicker
                     label="Date"
-                    defaultValue={selectedEvent ? new Date(selectedEvent.date) : new Date()}
-                    renderInput={(params) => <TextField {...params} fullWidth required />}
+                    value={selectedDate}
+                    onChange={(newValue) => setSelectedDate(newValue)}
+                    slotProps={{ textField: { fullWidth: true, required: true } }}
                   />
                 </LocalizationProvider>
               </Grid>
@@ -372,14 +390,16 @@ const Events = () => {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <TimePicker
                     label="Time"
-                    defaultValue={selectedEvent ? new Date(`1970-01-01T${selectedEvent.time}`) : new Date()}
-                    renderInput={(params) => <TextField {...params} fullWidth required />}
+                    value={selectedTime}
+                    onChange={(newValue) => setSelectedTime(newValue)}
+                    slotProps={{ textField: { fullWidth: true, required: true } }}
                   />
                 </LocalizationProvider>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
+                  name="capacity"
                   label="Capacity"
                   type="number"
                   defaultValue={selectedEvent?.capacity || ''}
@@ -389,6 +409,7 @@ const Events = () => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
+                  name="description"
                   label="Description"
                   multiline
                   rows={4}
