@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const { connectDB, sequelize } = require('./config/db');
 const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const userRoutes = require('./routes/userRoutes');
+const eventRoutes = require('./routes/eventRoutes');
 const User = require('./models/User');
 const Event = require('./models/Event');
 const Poll = require('./models/Poll');

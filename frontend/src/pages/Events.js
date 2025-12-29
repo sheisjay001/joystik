@@ -71,6 +71,10 @@ const Events = () => {
   const fetchEvents = async () => {
     try {
       const response = await fetch('/api/events');
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Received non-JSON response from server');
+      }
       const data = await response.json();
       setEvents(data);
     } catch (error) {
