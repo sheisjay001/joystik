@@ -24,7 +24,14 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Server returned non-JSON:', text);
+        throw new Error('Server returned non-JSON response');
+      }
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
@@ -48,7 +55,14 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ name, email, password }),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Server returned non-JSON:', text);
+        throw new Error('Server returned non-JSON response');
+      }
 
       if (!response.ok) {
         throw new Error(data.message || 'Registration failed');
