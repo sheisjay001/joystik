@@ -71,11 +71,19 @@ const Events = () => {
   const fetchEvents = async () => {
     try {
       const response = await fetch('/api/events');
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (e) {
+        console.error('Server returned non-JSON:', text);
         throw new Error('Received non-JSON response from server');
       }
-      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to fetch events');
+      }
+      
       setEvents(data);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -133,11 +141,20 @@ const Events = () => {
         body: JSON.stringify(eventData)
       });
 
+      const text = await response.text();
+      let data;
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch (e) {
+        console.error('Server returned non-JSON:', text);
+        throw new Error('Server returned non-JSON response');
+      }
+
       if (response.ok) {
         fetchEvents();
         handleCloseDialog();
       } else {
-        console.error('Failed to save event');
+        console.error('Failed to save event:', data.message || 'Unknown error');
       }
     } catch (error) {
       console.error('Error saving event:', error);
