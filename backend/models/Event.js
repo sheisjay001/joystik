@@ -28,8 +28,8 @@ const Event = sequelize.define('Event', {
     defaultValue: 'General',
   },
   status: {
-    type: DataTypes.ENUM('Upcoming', 'Completed', 'Cancelled'),
-    defaultValue: 'Upcoming',
+    type: DataTypes.ENUM('upcoming', 'past', 'draft'),
+    defaultValue: 'upcoming',
   },
 }, {
   timestamps: true,
