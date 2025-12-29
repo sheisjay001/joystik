@@ -51,56 +51,19 @@ const eventTypes = [
   { value: 'conference', label: 'Conference', color: 'error' },
 ];
 
-// Sample events data
-const sampleEvents = [
-  {
-    id: 1,
-    title: 'Community Meet & Greet',
-    type: 'meetup',
-    date: '2023-12-15',
-    time: '18:00',
-    location: 'Community Center',
-    description: 'A casual meetup for community members to network and connect.',
-    capacity: 50,
-    attendees: 32,
-    status: 'upcoming',
-    image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 2,
-    title: 'Intro to React Workshop',
-    type: 'workshop',
-    date: '2023-12-20',
-    time: '14:00',
-    location: 'Online',
-    description: 'Learn the basics of React.js in this hands-on workshop.',
-    capacity: 30,
-    attendees: 25,
-    status: 'upcoming',
-    image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-  },
-  {
-    id: 3,
-    title: 'Year End Party',
-    type: 'social',
-    date: '2023-12-31',
-    time: '20:00',
-    location: 'Downtown Venue',
-    description: 'Celebrate the end of the year with the community!',
-    capacity: 100,
-    attendees: 87,
-    status: 'upcoming',
-    image: 'https://images.unsplash.com/photo-1514525253440-b393452e8d26?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'
-  },
-];
-
 const Events = () => {
+  const [events, setEvents] = useState([]);
   const [activeTab, setActiveTab] = useState('upcoming');
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
+  // TODO: Fetch events from API
+  // useEffect(() => {
+  //   fetch('/api/events').then(res => res.json()).then(data => setEvents(data));
+  // }, []);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -122,7 +85,7 @@ const Events = () => {
     handleCloseDialog();
   };
 
-  const filteredEvents = sampleEvents.filter((event) => {
+  const filteredEvents = events.filter((event) => {
     const matchesTab = event.status === activeTab;
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           event.location.toLowerCase().includes(searchTerm.toLowerCase());

@@ -76,14 +76,7 @@ app.get('/api/dashboard', async (req, res) => {
     res.json(stats);
   } catch (error) {
     console.error('Error fetching dashboard stats:', error);
-    // Fallback to mock data if DB fails
-    const stats = [
-      { title: 'Total Members', value: '0', icon: 'PeopleIcon', color: 'primary' },
-      { title: 'Upcoming Events', value: '0', icon: 'EventIcon', color: 'primary' },
-      { title: 'Active Polls', value: '0', icon: 'PollIcon', color: 'primary' },
-      { title: 'New Announcements', value: '0', icon: 'AnnouncementIcon', color: 'primary' },
-    ];
-    res.json(stats);
+    res.status(500).json({ message: 'Server Error' });
   }
 });
 

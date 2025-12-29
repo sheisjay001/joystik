@@ -144,7 +144,7 @@ function App() {
                   <Route 
                     path="/analytics" 
                     element={
-                      <PrivateRoute>
+                      <PrivateRoute roles={['Admin']}>
                         <Analytics />
                       </PrivateRoute>
                     } 

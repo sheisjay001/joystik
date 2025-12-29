@@ -50,10 +50,15 @@ const Navbar = () => {
     { text: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
     { text: 'Members', path: '/members', icon: <PeopleIcon /> },
     { text: 'Events', path: '/events', icon: <EventIcon /> },
-    { text: 'Analytics', path: '/analytics', icon: <BarChartIcon /> },
+    { text: 'Analytics', path: '/analytics', icon: <BarChartIcon />, roles: ['Admin'] },
     { text: 'Resources', path: '/resources', icon: <FolderIcon /> },
     { text: 'Settings', path: '/settings', icon: <SettingsIcon /> },
   ];
+
+  const filteredMenuItems = menuItems.filter(item => {
+    if (!item.roles) return true;
+    return currentUser && item.roles.includes(currentUser.role);
+  });
 
   const drawer = (
     <Box sx={{ width: 250 }} role="presentation">
@@ -67,7 +72,7 @@ const Navbar = () => {
       </Box>
       <Divider />
       <List>
-        {currentUser && menuItems.map((item) => (
+        {currentUser && filteredMenuItems.map((item) => (
           <ListItem key={item.text} disablePadding>
             <ListItemButton 
               component={RouterLink} 
@@ -151,7 +156,7 @@ const Navbar = () => {
           
           {!isMobile && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              {currentUser && menuItems.map((item) => (
+              {currentUser && filteredMenuItems.map((item) => (
                 <Button 
                   key={item.text}
                   color="inherit" 

@@ -21,18 +21,22 @@ const sequelize = new Sequelize(
   }
 );
 
-const connectDB = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('TiDB/MySQL Database Connected Successfully.');
-    
-    // Sync models (create tables if they don't exist)
-    // await sequelize.sync(); 
-    // console.log('Database Synced.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error.message);
-    // Do not exit process to allow the app to run with mock data if DB fails
-    // process.exit(1);
+const connectDB = async (retries = 5) => {
+  while (retries > 0) {
+    try {
+      await sequelize.authenticate();
+      console.log('TiDB/MySQL Database Connected Successfully.');
+      return;
+    } catch (error) {
+      console.error(`Unable to connect to the database (Retries left: ${retries - 1}):`, error.message);
+      retries -= 1;
+      if (retries === 0) {
+        console.error('Max retries reached. Running without database connection.');
+      } else {
+        // Wait for 5 seconds before next retry
+        await new Promise(res => setTimeout(res, 5000));
+      }
+    }
   }
 };
 
