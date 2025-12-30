@@ -36,17 +36,19 @@ const connectDB = async () => {
       await sequelize.authenticate();
       console.log('TiDB/MySQL Database Connected Successfully.');
       isConnected = true;
-      return;
+      return true;
     } catch (error) {
       console.error(`Unable to connect to the database (Retries left: ${retries - 1}):`, error.message);
       retries -= 1;
       if (retries === 0) {
         console.error('Max retries reached. Running without database connection.');
+        return false;
       } else {
         await new Promise(res => setTimeout(res, delay));
       }
     }
   }
+  return false;
 };
 
 module.exports = { sequelize, connectDB };

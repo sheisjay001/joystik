@@ -39,7 +39,14 @@ app.use(express.json());
 // Database connection middleware
 app.use(async (req, res, next) => {
   if (req.path === '/api/health') return next(); // Skip for health check
-  await connectDB();
+  
+  const connected = await connectDB();
+  if (!connected) {
+    return res.status(503).json({ 
+      message: 'Service Unavailable: Database connection failed',
+      details: 'Please check server logs for more information.'
+    });
+  }
   next();
 });
 
@@ -51,8 +58,22 @@ app.get('/', (req, res) => {
   res.send('CommunityHub API is running...');
 });
 
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', environment: process.env.NODE_ENV });
+app.get('/api/health', async (req, res) => {
+  // Check DB status
+  let dbStatus = 'disconnected';
+  try {
+    await sequelize.authenticate();
+    dbStatus = 'connected';
+  } catch (e) {
+    dbStatus = 'error: ' + e.message;
+  }
+  
+  res.json({ 
+    status: 'ok', 
+    environment: process.env.NODE_ENV,
+    database: dbStatus,
+    timestamp: new Date().toISOString()
+  });
 });
 
 app.get('/api/dashboard', async (req, res) => {
