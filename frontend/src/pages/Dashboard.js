@@ -42,11 +42,14 @@ const Dashboard = () => {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const API_BASE = (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL)
+    ? process.env.REACT_APP_API_URL
+    : (!window.location.port ? `${window.location.protocol}//${window.location.hostname}:5000` : '');
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await fetch('/api/dashboard');
+        const response = await fetch(`${API_BASE}/api/dashboard`);
         if (!response.ok) {
           throw new Error('Failed to fetch dashboard data');
         }

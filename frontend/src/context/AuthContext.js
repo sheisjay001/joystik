@@ -5,6 +5,9 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const API_BASE = (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL)
+    ? process.env.REACT_APP_API_URL
+    : (!window.location.port ? `${window.location.protocol}//${window.location.hostname}:5000` : '');
 
   useEffect(() => {
     const userInfo = localStorage.getItem('userInfo');
@@ -16,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await fetch('/api/users/login', {
+      const response = await fetch(`${API_BASE}/api/users/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +50,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (name, email, password) => {
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`${API_BASE}/api/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

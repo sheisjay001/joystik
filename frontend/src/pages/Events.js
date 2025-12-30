@@ -62,6 +62,9 @@ const Events = () => {
   
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const API_BASE = (typeof process !== 'undefined' && process.env && process.env.REACT_APP_API_URL)
+    ? process.env.REACT_APP_API_URL
+    : (!window.location.port ? `${window.location.protocol}//${window.location.hostname}:5000` : '');
 
   // Fetch events from API
   useEffect(() => {
@@ -70,7 +73,7 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await fetch('/api/events');
+      const response = await fetch(`${API_BASE}/api/events`);
       const text = await response.text();
       let data;
       try {
@@ -133,7 +136,7 @@ const Events = () => {
 
     try {
       const method = selectedEvent ? 'PUT' : 'POST';
-      const url = selectedEvent ? `/api/events/${selectedEvent.id}` : '/api/events';
+      const url = selectedEvent ? `${API_BASE}/api/events/${selectedEvent.id}` : `${API_BASE}/api/events`;
       
       const response = await fetch(url, {
         method,
