@@ -46,7 +46,8 @@ app.use(express.json());
 
 // Database connection middleware
 app.use(async (req, res, next) => {
-  if (req.path === '/api/health') return next(); // Skip for health check
+  if (req.path === '/api/health' || req.method === 'OPTIONS') return next(); // Skip for health check
+
   
   const connected = await connectDB();
   if (!connected) {

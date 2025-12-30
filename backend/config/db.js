@@ -12,6 +12,12 @@ const sequelize = new Sequelize(
     host: process.env.TIDB_HOST || '127.0.0.1',
     port: process.env.TIDB_PORT || 4000,
     dialect: 'mysql',
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    },
     dialectOptions: {
       ssl: process.env.TIDB_ENABLE_SSL === 'true' ? {
         minVersion: 'TLSv1.2',
