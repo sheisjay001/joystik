@@ -66,11 +66,6 @@ const Events = () => {
     ? process.env.REACT_APP_API_URL
     : (!window.location.port ? `${window.location.protocol}//${window.location.hostname}:5000` : '');
 
-  // Fetch events from API
-  useEffect(() => {
-    fetchEvents();
-  }, [fetchEvents]);
-
   const fetchEvents = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/api/events`);
@@ -93,6 +88,10 @@ const Events = () => {
     }
   }, [API_BASE]);
 
+  // Fetch events from API
+  useEffect(() => {
+    fetchEvents();
+  }, [fetchEvents]);
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
   };
