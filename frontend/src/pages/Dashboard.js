@@ -55,6 +55,7 @@ const Dashboard = () => {
         }
         const data = await response.json();
         
+        
         // Map string icon names back to components
         const mappedData = data.map(item => ({
           ...item,
@@ -72,7 +73,7 @@ const Dashboard = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [API_BASE]);
 
   const getIconComponent = (iconName) => {
     switch (iconName) {

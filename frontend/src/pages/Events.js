@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -69,9 +69,9 @@ const Events = () => {
   // Fetch events from API
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [fetchEvents]);
 
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
     try {
       const response = await fetch(`${API_BASE}/api/events`);
       const text = await response.text();
@@ -91,7 +91,7 @@ const Events = () => {
     } catch (error) {
       console.error('Error fetching events:', error);
     }
-  };
+  }, [API_BASE]);
 
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
