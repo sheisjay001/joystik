@@ -26,8 +26,8 @@ const syncDB = async () => {
     console.error('Failed to sync database:', error.message);
   }
 };
-// Sync in development by default; allow controlled sync in production via env flag
-if (process.env.NODE_ENV !== 'production' || process.env.DB_SYNC_ON_START === 'true') {
+// Sync in development ONLY; explicitly disabled in production
+if (process.env.NODE_ENV !== 'production' && process.env.DB_SYNC_ON_START === 'true') {
   (async () => {
     const connected = await connectDB();
     if (connected) {
