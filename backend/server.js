@@ -13,7 +13,7 @@ const Announcement = require('./models/Announcement');
 // Load environment variables
 dotenv.config();
 
-// Connect to database (will run in background if not awaited here)
+// Connect to database (non-blocking initial attempt)
 connectDB();
 
 // Sync Database
@@ -25,9 +25,16 @@ const syncDB = async () => {
     console.error('Failed to sync database:', error.message);
   }
 };
-// Only sync if not production to avoid table locks/perf issues on startup
-if (process.env.NODE_ENV !== 'production') {
-  syncDB();
+// Sync in development by default; allow controlled sync in production via env flag
+if (process.env.NODE_ENV !== 'production' || process.env.DB_SYNC_ON_START === 'true') {
+  (async () => {
+    const connected = await connectDB();
+    if (connected) {
+      await syncDB();
+    } else {
+      console.error('Skipping sync: database not connected.');
+    }
+  })();
 }
 
 const app = express();

@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+const mysql = require('mysql2/promise');
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -23,8 +24,20 @@ const sequelize = new Sequelize(
 
 let isConnected = false;
 
+const ensureDatabase = async () => {
+  const host = process.env.TIDB_HOST || '127.0.0.1';
+  const port = Number(process.env.TIDB_PORT || 4000);
+  const user = process.env.TIDB_USER || 'root';
+  const password = process.env.TIDB_PASSWORD || '';
+  const dbName = process.env.TIDB_DB_NAME || 'communityhub';
+
+  const conn = await mysql.createConnection({ host, port, user, password });
+  await conn.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
+  await conn.end();
+};
+
 const connectDB = async () => {
-  if (isConnected) return;
+  if (isConnected) return true;
 
   // In production (Vercel), fail fast to avoid function timeout
   // In development, retry a few times
@@ -38,6 +51,14 @@ const connectDB = async () => {
       isConnected = true;
       return true;
     } catch (error) {
+      if (error && (/Unknown database/i.test(error.message) || error.code === 'ER_BAD_DB_ERROR')) {
+        try {
+          await ensureDatabase();
+          console.log('Database ensured/created.');
+        } catch (e) {
+          console.error('Failed to create database:', e.message);
+        }
+      }
       console.error(`Unable to connect to the database (Retries left: ${retries - 1}):`, error.message);
       retries -= 1;
       if (retries === 0) {
