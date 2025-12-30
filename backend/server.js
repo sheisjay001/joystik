@@ -13,7 +13,7 @@ const Announcement = require('./models/Announcement');
 // Load environment variables
 dotenv.config();
 
-// Connect to database
+// Connect to database (will run in background if not awaited here)
 connectDB();
 
 // Sync Database
@@ -25,13 +25,23 @@ const syncDB = async () => {
     console.error('Failed to sync database:', error.message);
   }
 };
-syncDB();
+// Only sync if not production to avoid table locks/perf issues on startup
+if (process.env.NODE_ENV !== 'production') {
+  syncDB();
+}
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Database connection middleware
+app.use(async (req, res, next) => {
+  if (req.path === '/api/health') return next(); // Skip for health check
+  await connectDB();
+  next();
+});
 
 app.use('/api/users', userRoutes);
 app.use('/api/events', eventRoutes);

@@ -14,14 +14,18 @@ const sequelize = new Sequelize(
     dialectOptions: {
       ssl: process.env.TIDB_ENABLE_SSL === 'true' ? {
         minVersion: 'TLSv1.2',
-        rejectUnauthorized: true
+        rejectUnauthorized: process.env.TIDB_SSL_STRICT === 'true' // Default to false if not specified to avoid CA issues
       } : null
     },
     logging: false,
   }
 );
 
+let isConnected = false;
+
 const connectDB = async () => {
+  if (isConnected) return;
+
   // In production (Vercel), fail fast to avoid function timeout
   // In development, retry a few times
   let retries = process.env.NODE_ENV === 'production' ? 1 : 5;
@@ -31,6 +35,7 @@ const connectDB = async () => {
     try {
       await sequelize.authenticate();
       console.log('TiDB/MySQL Database Connected Successfully.');
+      isConnected = true;
       return;
     } catch (error) {
       console.error(`Unable to connect to the database (Retries left: ${retries - 1}):`, error.message);
