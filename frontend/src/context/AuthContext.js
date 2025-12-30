@@ -59,10 +59,13 @@ export const AuthProvider = ({ children }) => {
         console.error('Response Body (first 200 chars):', text.substring(0, 200));
         
         if (text.includes('FUNCTION_INVOCATION_FAILED')) {
-            throw new Error('Backend crashed (Timeout/Error). Check server logs.');
-        }
-        throw new Error(`Server Error (${response.status}): Non-JSON response received.`);
-      }
+             throw new Error('Backend crashed (Timeout/Error). Check server logs.');
+         }
+         if (response.status === 404) {
+             throw new Error('API Endpoint not found (404). Check vercel.json rewrites.');
+         }
+         throw new Error(`Server Error (${response.status}): Non-JSON response received.`);
+       }
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
@@ -91,8 +94,15 @@ export const AuthProvider = ({ children }) => {
       try {
         data = JSON.parse(text);
       } catch (e) {
-        console.error('Server returned non-JSON:', text);
-        throw new Error('Server returned non-JSON response');
+        console.error('CRITICAL ERROR: Server returned non-JSON.');
+        console.error('Requested URL:', `${API_BASE}/api/users`);
+        console.error('Response Status:', response.status);
+        console.error('Response Body (first 200 chars):', text.substring(0, 200));
+        
+        if (text.includes('FUNCTION_INVOCATION_FAILED')) {
+            throw new Error('Backend crashed (Timeout/Error). Check server logs.');
+        }
+        throw new Error(`Server Error (${response.status}): Non-JSON response received.`);
       }
 
       if (!response.ok) {
