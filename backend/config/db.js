@@ -20,10 +20,10 @@ const sequelize = new Sequelize(
     },
     dialectOptions: {
       connectTimeout: 5000, // Fail fast (5s) to avoid Vercel timeouts
-      ssl: process.env.TIDB_ENABLE_SSL === 'true' ? {
+      ssl: {
         minVersion: 'TLSv1.2',
-        rejectUnauthorized: process.env.TIDB_SSL_STRICT === 'true' // Default to false if not specified to avoid CA issues
-      } : null
+        rejectUnauthorized: false // Always allow self-signed/cloud certs to prevent handshake errors
+      }
     },
     logging: false,
   }
