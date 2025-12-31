@@ -14,8 +14,8 @@ const Announcement = require('./models/Announcement');
 // Load environment variables
 dotenv.config();
 
-// Connect to database (non-blocking initial attempt)
-connectDB();
+// Connect to database (Lazy load - do not connect at top level for Serverless)
+// connectDB(); // REMOVED: Causing timeouts on cold start
 
 // Sync Database
 const syncDB = async () => {
@@ -71,6 +71,7 @@ app.get('/api/health', async (req, res) => {
   // Check DB status
   let dbStatus = 'disconnected';
   try {
+    // Only verify auth, don't sync
     await sequelize.authenticate();
     dbStatus = 'connected';
   } catch (e) {
@@ -81,7 +82,13 @@ app.get('/api/health', async (req, res) => {
     status: 'ok', 
     environment: process.env.NODE_ENV,
     database: dbStatus,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    env_check: {
+        has_host: !!process.env.TIDB_HOST,
+        has_user: !!process.env.TIDB_USER,
+        has_pass: !!process.env.TIDB_PASSWORD,
+        has_db: !!process.env.TIDB_DB_NAME
+    }
   });
 });
 

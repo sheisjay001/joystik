@@ -47,36 +47,33 @@ const connectDB = async () => {
   if (isConnected) return true;
 
   // In production (Vercel), fail fast to avoid function timeout
-  // In development, retry a few times
-  let retries = process.env.NODE_ENV === 'production' ? 1 : 5;
-  const delay = 2000; // 2 seconds
+  // Enforce a strict 5s timeout race
+  const timeoutPromise = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error('DB_CONNECTION_TIMEOUT')), 4000)
+  );
 
-  while (retries > 0) {
-    try {
-      await sequelize.authenticate();
-      console.log('TiDB/MySQL Database Connected Successfully.');
-      isConnected = true;
-      return true;
-    } catch (error) {
-      if (error && (/Unknown database/i.test(error.message) || error.code === 'ER_BAD_DB_ERROR')) {
-        try {
-          await ensureDatabase();
-          console.log('Database ensured/created.');
-        } catch (e) {
-          console.error('Failed to create database:', e.message);
-        }
-      }
-      console.error(`Unable to connect to the database (Retries left: ${retries - 1}):`, error.message);
-      retries -= 1;
-      if (retries === 0) {
-        console.error('Max retries reached. Running without database connection.');
-        return false;
-      } else {
-        await new Promise(res => setTimeout(res, delay));
-      }
+  try {
+    // Race between connection and timeout
+    if (process.env.NODE_ENV === 'production') {
+       await Promise.race([sequelize.authenticate(), timeoutPromise]);
+    } else {
+       await sequelize.authenticate();
     }
+    
+    console.log('TiDB/MySQL Database Connected Successfully.');
+    isConnected = true;
+    return true;
+  } catch (error) {
+    console.error('Database connection failed:', error.message);
+    
+    // Retry logic only for dev or specific errors if needed, 
+    // but for Vercel production we generally want to fail fast and return 503
+    // so the frontend handles it rather than timing out.
+    if (process.env.NODE_ENV !== 'production') {
+        // ... existing retry logic for dev could go here if needed ...
+    }
+    return false;
   }
-  return false;
 };
 
 module.exports = { sequelize, connectDB };
