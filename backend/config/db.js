@@ -46,6 +46,14 @@ const ensureDatabase = async () => {
 const connectDB = async () => {
   if (isConnected) return true;
 
+  // CRITICAL: Prevent connecting to localhost in production (Vercel)
+  // This prevents the function from hanging/crashing if env vars are missing.
+  if (process.env.NODE_ENV === 'production' && !process.env.TIDB_HOST) {
+    console.error('CRITICAL ERROR: TIDB_HOST environment variable is missing in Production.');
+    console.error('Cannot connect to database. Aborting connection attempt.');
+    return false;
+  }
+
   // In production (Vercel), fail fast to avoid function timeout
   // Enforce a strict 5s timeout race
   const timeoutPromise = new Promise((_, reject) => 
@@ -53,6 +61,9 @@ const connectDB = async () => {
   );
 
   try {
+    // Debug logging
+    console.log(`Connecting to DB: ${process.env.TIDB_HOST || 'localhost'} User: ${process.env.TIDB_USER || 'root'}`);
+    
     // Race between connection and timeout
     if (process.env.NODE_ENV === 'production') {
        await Promise.race([sequelize.authenticate(), timeoutPromise]);
